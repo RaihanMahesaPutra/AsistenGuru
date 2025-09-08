@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">Asisten Guru</string>
+    <string name="app_title">Asisten Guru</string>
+    <string name="app_subtitle">Pusat inovasi pembelajaran dan administrasi guru berbasis AI</string>
+
+    <string name="statistics_title">📊 Statistik</string>
+    <string name="stats_prompt_categories">Kategori Prompt: 7 kategori</string>
+    <string name="stats_ai_prompts">Prompt AI: 82 jenis prompt</string>
+    <string name="stats_ai_webs">Web AI: 25 web</string>
+
+    <string name="nav_web_ai">🌐 Bank Web AI</string>
+    <string name="nav_prompt_ai">🤖 Bank Prompt AI</string>
+    <string name="nav_database">💾 Database</string>
+
+    <string name="favorite_webs_title">⭐ Web Favorit</string>
+    <string name="ai_prompts_title">🤖 Prompt AI</string>
+    <string name="ai_webs_title">🌐 Web AI</string>
+
+    <string name="cd_navigate_to_web_ai_bank">Buka Bank Web AI</string>
+    <string name="cd_navigate_to_prompt_ai_bank">Buka Bank Prompt AI</string>
+    <string name="cd_navigate_to_database">Buka Database</string>
+    <string name="ai_web_logo">ChatGpt</string>
+    <string name="web_logo">ChatGpt</string>
+</resources>
