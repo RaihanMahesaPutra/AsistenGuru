@@ -8,99 +8,107 @@ import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.example.asistenguru.CategoryListActivity
+import com.example.asistenguru.DetailCategoryActivity
 import com.example.asistenguru.R
 import com.example.asistenguru.adapter.CategoryAdapter
+import com.example.asistenguru.adapter.WebFavoritAdapter
+import com.example.asistenguru.data.DataSource
 import com.example.asistenguru.model.CategoryItem
+import com.example.asistenguru.model.WebFavorit
 
-class HomeFragment : Fragment(R.layout.fragment_home) {
+class HomeFragment : Fragment(R.layout.fragment_home), CategoryAdapter.OnCategoryClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Inisialisasi semua View yang diperlukan dari layout
+        // Inisialisasi semua View
         val rvPromptCategories: RecyclerView = view.findViewById(R.id.rvPromptCategories)
         val rvWebAiCategories: RecyclerView = view.findViewById(R.id.rvWebAiCategories)
         val tvSeeAllPrompts: TextView = view.findViewById(R.id.tvSeeAllPrompts)
+        val rvWebFavorit: RecyclerView = view.findViewById(R.id.rvWebFavorit)
         val tvSeeAllWebs: TextView = view.findViewById(R.id.tvSeeAllWebs)
         val btnPromptAi: CardView = view.findViewById(R.id.btnPromptAi)
         val btnWebAi: CardView = view.findViewById(R.id.btnWebAi)
 
-        // 1. Mengisi RecyclerView untuk Kategori Prompt AI
-        setupPromptCategories(rvPromptCategories)
+        setupWebFavorit(rvWebFavorit)
+        setupPromptCategories(view.findViewById(R.id.rvPromptCategories))
+        setupWebAiCategories(view.findViewById(R.id.rvWebAiCategories))
+        setupNavigation(view)
+        updateStatistics(view)
+    }
 
-        // 2. Mengisi RecyclerView untuk Kategori Web AI
-        setupWebAiCategories(rvWebAiCategories)
+    // --- FUNGSI BARU UNTUK WEB FAVORIT ---
+    private fun setupWebFavorit(recyclerView: RecyclerView) {
+        val favoritList = getWebFavoritData()
+        recyclerView.adapter = WebFavoritAdapter(favoritList)
+    }
 
-        // 3. (Opsional) Mengisi RecyclerView untuk Web Favorit
-        // setupWebFavorit(view.findViewById(R.id.rvWebFavorit))
+    // --- FUNGSI BARU UNTUK DATA WEB FAVORIT ---
+    private fun getWebFavoritData(): List<WebFavorit> {
+        return listOf(
+            WebFavorit("🎨", "Canva", "Situs Web", "https://www.canva.com"),
+            WebFavorit("🤖", "ChatGPT", "Situs Web", "https://chat.openai.com"),
+            WebFavorit("📈", "Quizizz", "Situs Web", "https://quizizz.com"),
+            WebFavorit("🎬", "YouTube", "Situs Web", "https://youtube.com"),
+            WebFavorit("📝", "Google Forms", "Situs Web", "https://docs.google.com/forms/")
+        )
+    }
 
-        // 4. Mengatur aksi klik untuk navigasi
-        setupNavigation(tvSeeAllPrompts, tvSeeAllWebs, btnPromptAi, btnWebAi)
+    /**
+     * Fungsi baru untuk mengambil data, menghitung, dan menampilkannya
+     * di kartu statistik secara otomatis.
+     */
+    private fun updateStatistics(view: View) {
+        val tvStatPromptCategories: TextView = view.findViewById(R.id.tvStatPromptCategories)
+        val tvStatTotalPrompts: TextView = view.findViewById(R.id.tvStatTotalPrompts)
+        val tvStatWebCategories: TextView = view.findViewById(R.id.tvStatWebCategories)
+        val tvStatTotalWebs: TextView = view.findViewById(R.id.tvStatTotalWebs)
+
+        // Mengambil data dari DataSource
+        val promptCategories = DataSource.getPromptCategories()
+        val totalPrompts = promptCategories.sumOf { it.itemCount }
+
+        val webCategories = DataSource.getWebCategories()
+        val totalWebs = webCategories.sumOf { it.itemCount }
+
+        tvStatPromptCategories.text = "Kategori Prompt: ${promptCategories.size} kategori"
+        tvStatTotalPrompts.text = "Total Prompt AI: $totalPrompts prompt"
+        tvStatWebCategories.text = "Kategori Web AI: ${webCategories.size} kategori"
+        tvStatTotalWebs.text = "Total Web AI: $totalWebs web"
     }
 
     private fun setupPromptCategories(recyclerView: RecyclerView) {
-        val promptCategoryList = getPromptCategories() // Ambil data
-        recyclerView.adapter = CategoryAdapter(promptCategoryList) // Set adapter
+        recyclerView.adapter = CategoryAdapter(DataSource.getPromptCategories(), this)
     }
 
     private fun setupWebAiCategories(recyclerView: RecyclerView) {
-        val webCategoryList = getWebCategories() // Ambil data
-        recyclerView.adapter = CategoryAdapter(webCategoryList) // Set adapter
+        recyclerView.adapter = CategoryAdapter(DataSource.getWebCategories(), this)
     }
 
-    private fun setupNavigation(
-        seeAllPrompts: TextView,
-        seeAllWebs: TextView,
-        promptButton: CardView,
-        webButton: CardView
-    ) {
-        // Aksi klik untuk "Lihat Semua Prompt"
-        seeAllPrompts.setOnClickListener {
-            navigateToCategoryList("Prompt AI")
+    override fun onCategoryClick(category: CategoryItem) {
+        val intent = Intent(requireContext(), DetailCategoryActivity::class.java).apply {
+            putExtra("CATEGORY_TITLE", category.title)
+            putExtra("CATEGORY_TYPE", category.type)
         }
-
-        // Aksi klik untuk tombol utama Prompt AI
-        promptButton.setOnClickListener {
-            navigateToCategoryList("Prompt AI")
-        }
-
-        // Aksi klik untuk "Lihat Semua Web"
-        seeAllWebs.setOnClickListener {
-            navigateToCategoryList("Web AI")
-        }
-
-        // Aksi klik untuk tombol utama Web AI
-        webButton.setOnClickListener {
-            navigateToCategoryList("Web AI")
-        }
+        startActivity(intent)
     }
 
-    // Fungsi bantuan untuk navigasi agar tidak ada duplikasi kode
+    private fun setupNavigation(view: View) {
+        val tvSeeAllPrompts: TextView = view.findViewById(R.id.tvSeeAllPrompts)
+        val tvSeeAllWebs: TextView = view.findViewById(R.id.tvSeeAllWebs)
+        val promptButton: CardView = view.findViewById(R.id.btnPromptAi)
+        val webButton: CardView = view.findViewById(R.id.btnWebAi)
+
+        tvSeeAllPrompts.setOnClickListener { navigateToCategoryList("Prompt AI") }
+        promptButton.setOnClickListener { navigateToCategoryList("Prompt AI") }
+        tvSeeAllWebs.setOnClickListener { navigateToCategoryList("Web AI") }
+        webButton.setOnClickListener { navigateToCategoryList("Web AI") }
+    }
+
     private fun navigateToCategoryList(pageTitle: String) {
         val intent = Intent(requireContext(), CategoryListActivity::class.java).apply {
             putExtra("PAGE_TITLE", pageTitle)
         }
         startActivity(intent)
-    }
-
-    // Data contoh untuk Kategori Prompt AI
-    // Data contoh untuk Kategori Prompt AI dengan EMOJI
-    private fun getPromptCategories(): List<CategoryItem> {
-        return listOf(
-            CategoryItem("📄", "Administrasi Guru", 17, "prompt"),
-            CategoryItem("📚", "Bahan Pembelajaran", 6, "prompt"),
-            CategoryItem("🧠", "Manajemen & Refleksi", 8, "prompt"),
-            CategoryItem("📋", "Evaluasi", 11, "prompt")
-        )
-    }
-
-    // Data contoh untuk Kategori Web AI dengan EMOJI
-    private fun getWebCategories(): List<CategoryItem> {
-        return listOf(
-            CategoryItem("📄", "Administrasi", 5, "web"),
-            CategoryItem("✨", "Media Interaktif", 5, "web"),
-            CategoryItem("📈", "Evaluasi Pembelajaran", 7, "web"),
-            CategoryItem("🎬", "Media Pembelajaran", 7, "web")
-        )
     }
 }

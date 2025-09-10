@@ -8,14 +8,28 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.asistenguru.R
 import com.example.asistenguru.model.CategoryItem
 
-class CategoryAdapter(private val items: List<CategoryItem>) :
-    RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
+class CategoryAdapter(
+    private val items: List<CategoryItem>,
+    private val listener: OnCategoryClickListener
+) : RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
+
+    interface OnCategoryClickListener {
+        fun onCategoryClick(category: CategoryItem)
+    }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        // DIUBAH: Referensi ke TextView ikon
         val icon: TextView = view.findViewById(R.id.tvCategoryIcon)
         val title: TextView = view.findViewById(R.id.tvCategoryTitle)
         val count: TextView = view.findViewById(R.id.tvItemCount)
+
+        init {
+            itemView.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    listener.onCategoryClick(items[position])
+                }
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -26,7 +40,6 @@ class CategoryAdapter(private val items: List<CategoryItem>) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = items[position]
-        // DIUBAH: Mengatur teks emoji
         holder.icon.text = item.iconEmoji
         holder.title.text = item.title
         holder.count.text = "${item.itemCount} ${item.type}"

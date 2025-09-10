@@ -1,13 +1,15 @@
 package com.example.asistenguru
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.example.asistenguru.adapter.CategoryDetailAdapter // DIUBAH: Impor adapter yang baru
+import com.example.asistenguru.adapter.CategoryDetailAdapter
 import com.example.asistenguru.model.CategoryItem
 
-class CategoryListActivity : AppCompatActivity() {
+class CategoryListActivity : AppCompatActivity(), CategoryDetailAdapter.OnCategoryClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_category_list)
@@ -24,11 +26,17 @@ class CategoryListActivity : AppCompatActivity() {
             getWebCategories()
         }
 
-        // PERBEDAAN UTAMA: Menggunakan CategoryDetailAdapter
-        recyclerView.adapter = CategoryDetailAdapter(categoryList)
+        recyclerView.adapter = CategoryDetailAdapter(categoryList, this)
     }
 
-    // Data contoh untuk Kategori Prompt AI dengan EMOJI
+    override fun onCategoryClick(category: CategoryItem) {
+        val intent = Intent(this, DetailCategoryActivity::class.java).apply {
+            putExtra("CATEGORY_TITLE", category.title)
+            putExtra("CATEGORY_TYPE", category.type) // KIRIM TIPE KATEGORI
+        }
+        startActivity(intent)
+    }
+
     private fun getPromptCategories(): List<CategoryItem> {
         return listOf(
             CategoryItem("📄", "Administrasi Guru", 17, "prompt"),
@@ -38,7 +46,6 @@ class CategoryListActivity : AppCompatActivity() {
         )
     }
 
-    // Data contoh untuk Kategori Web AI dengan EMOJI
     private fun getWebCategories(): List<CategoryItem> {
         return listOf(
             CategoryItem("📄", "Administrasi", 5, "web"),

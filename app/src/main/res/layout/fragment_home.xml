@@ -5,7 +5,7 @@
     android:id="@+id/homeFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F7F8FA"
+    android:background="#FFFFFF"
     tools:context=".ui.HomeFragment"
     android:paddingTop="50dp">
 
@@ -40,16 +40,19 @@
             android:id="@+id/cardStatistik"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/default_padding"
-            android:layout_marginBottom="@dimen/default_padding"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="16dp"
             app:cardCornerRadius="12dp"
-            app:cardElevation="4dp">
+            app:cardElevation="0dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="#EEEEEE">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/white"
                 android:orientation="vertical"
-                android:padding="@dimen/default_padding">
+                android:padding="16dp">
+
                 <TextView
                     style="@style/TextAppearance.MaterialComponents.Subtitle1"
                     android:layout_width="wrap_content"
@@ -57,21 +60,36 @@
                     android:layout_marginBottom="8dp"
                     android:text="@string/statistics_title"
                     android:textStyle="bold" />
+
                 <TextView
+                    android:id="@+id/tvStatPromptCategories"
                     style="@style/TextAppearance.MaterialComponents.Body1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/stats_prompt_categories" />
+                    tools:text="Kategori Prompt: 0 kategori" />
+
                 <TextView
+                    android:id="@+id/tvStatTotalPrompts"
                     style="@style/TextAppearance.MaterialComponents.Body1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/stats_ai_prompts" />
+                    tools:text="Total Prompt AI: 0 prompt" />
+
                 <TextView
+                    android:id="@+id/tvStatWebCategories"
                     style="@style/TextAppearance.MaterialComponents.Body1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/stats_ai_webs" />
+                    android:layout_marginTop="8dp"
+                    tools:text="Kategori Web AI: 0 kategori" />
+
+                <TextView
+                    android:id="@+id/tvStatTotalWebs"
+                    style="@style/TextAppearance.MaterialComponents.Body1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="Total Web AI: 0 web" />
+
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -164,7 +182,7 @@
             android:orientation="horizontal"
             android:paddingHorizontal="@dimen/default_padding"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/item_web_favorit" />
+            tools:listitem="@layout/item_web_ai_detail" />
 
         <RelativeLayout
             android:layout_width="match_parent"

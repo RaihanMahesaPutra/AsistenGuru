@@ -3,19 +3,33 @@ package com.example.asistenguru.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView // ImageView sudah tidak dipakai
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.asistenguru.R
 import com.example.asistenguru.model.CategoryItem
 
-class CategoryDetailAdapter(private val items: List<CategoryItem>) :
-    RecyclerView.Adapter<CategoryDetailAdapter.ViewHolder>() {
+class CategoryDetailAdapter(
+    private val items: List<CategoryItem>,
+    private val listener: OnCategoryClickListener
+) : RecyclerView.Adapter<CategoryDetailAdapter.ViewHolder>() {
+
+    interface OnCategoryClickListener {
+        fun onCategoryClick(category: CategoryItem)
+    }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        // DIUBAH: 'icon' sekarang adalah TextView
         val icon: TextView = view.findViewById(R.id.tvCategoryIcon)
         val title: TextView = view.findViewById(R.id.tvCategoryTitle)
         val count: TextView = view.findViewById(R.id.tvItemCount)
+
+        init {
+            itemView.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    listener.onCategoryClick(items[position])
+                }
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -26,8 +40,6 @@ class CategoryDetailAdapter(private val items: List<CategoryItem>) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = items[position]
-
-        // DIUBAH: Menggunakan .text dan properti iconEmoji
         holder.icon.text = item.iconEmoji
         holder.title.text = item.title
         holder.count.text = "${item.itemCount} ${item.type}"
