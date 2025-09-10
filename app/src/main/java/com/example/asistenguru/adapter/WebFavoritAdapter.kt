@@ -6,6 +6,7 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView // Impor ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
@@ -16,7 +17,7 @@ class WebFavoritAdapter(private val items: List<WebFavorit>) :
     RecyclerView.Adapter<WebFavoritAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val icon: TextView = view.findViewById(R.id.tvFavoritIcon)
+        val logo: ImageView = view.findViewById(R.id.ivFavoritLogo) // DIUBAH: Referensi ke ImageView
         val name: TextView = view.findViewById(R.id.tvFavoritName)
         val description: TextView = view.findViewById(R.id.tvFavoritDescription)
     }
@@ -29,11 +30,10 @@ class WebFavoritAdapter(private val items: List<WebFavorit>) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = items[position]
-        holder.icon.text = item.logoEmoji
+        holder.logo.setImageResource(item.logoResId) // DIUBAH: Mengatur gambar dari resource ID
         holder.name.text = item.name
         holder.description.text = item.description
 
-        // Menambahkan click listener untuk membuka link
         holder.itemView.setOnClickListener {
             openUrl(it.context, item.url)
         }
@@ -41,7 +41,6 @@ class WebFavoritAdapter(private val items: List<WebFavorit>) :
 
     override fun getItemCount() = items.size
 
-    // Fungsi helper untuk membuka URL di browser
     private fun openUrl(context: Context, url: String) {
         try {
             val intent = Intent(Intent.ACTION_VIEW).apply {
@@ -49,7 +48,6 @@ class WebFavoritAdapter(private val items: List<WebFavorit>) :
             }
             context.startActivity(intent)
         } catch (e: Exception) {
-            // Tangani jika tidak ada browser atau URL tidak valid
             Toast.makeText(context, "Tidak bisa membuka link", Toast.LENGTH_SHORT).show()
         }
     }

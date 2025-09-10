@@ -43,14 +43,14 @@ class HomeFragment : Fragment(R.layout.fragment_home), CategoryAdapter.OnCategor
         recyclerView.adapter = WebFavoritAdapter(favoritList)
     }
 
-    // --- FUNGSI BARU UNTUK DATA WEB FAVORIT ---
     private fun getWebFavoritData(): List<WebFavorit> {
         return listOf(
-            WebFavorit("🎨", "Canva", "Situs Web", "https://www.canva.com"),
-            WebFavorit("🤖", "ChatGPT", "Situs Web", "https://chat.openai.com"),
-            WebFavorit("📈", "Quizizz", "Situs Web", "https://quizizz.com"),
-            WebFavorit("🎬", "YouTube", "Situs Web", "https://youtube.com"),
-            WebFavorit("📝", "Google Forms", "Situs Web", "https://docs.google.com/forms/")
+            // DIUBAH: Menggunakan ID drawable untuk logo
+            WebFavorit(R.drawable.logo_canva, "Canva", "Desain Grafis", "https://www.canva.com"),
+            WebFavorit(R.drawable.logo_chatgpt, "ChatGPT", "Asisten AI", "https://chat.openai.com"),
+            WebFavorit(R.drawable.logo_quizizz, "Quizizz", "Kuis Interaktif", "https://quizizz.com"),
+            WebFavorit(R.drawable.logo_youtube, "YouTube", "Video Pembelajaran", "https://youtube.com"),
+            WebFavorit(R.drawable.logo_googleforms, "Google Forms", "Survei & Kuis", "https://docs.google.com/forms/")
         )
     }
 
