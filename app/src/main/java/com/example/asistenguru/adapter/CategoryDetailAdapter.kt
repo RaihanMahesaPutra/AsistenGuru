@@ -9,7 +9,7 @@ import com.example.asistenguru.R
 import com.example.asistenguru.model.CategoryItem
 
 class CategoryDetailAdapter(
-    private val items: List<CategoryItem>,
+    private var items: MutableList<CategoryItem>, // DIUBAH: Jadikan list bisa diubah
     private val listener: OnCategoryClickListener
 ) : RecyclerView.Adapter<CategoryDetailAdapter.ViewHolder>() {
 
@@ -46,4 +46,11 @@ class CategoryDetailAdapter(
     }
 
     override fun getItemCount() = items.size
+
+    // FUNGSI BARU: Untuk memfilter dan memperbarui daftar
+    fun filterList(filteredList: List<CategoryItem>) {
+        items.clear()
+        items.addAll(filteredList)
+        notifyDataSetChanged()
+    }
 }

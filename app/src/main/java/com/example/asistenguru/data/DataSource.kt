@@ -18,6 +18,7 @@ object DataSource {
 
     // Sumber data untuk Kategori Web AI
     fun getWebCategories(): List<CategoryItem> {
+        // itemCount dihitung OTOMATIS dari jumlah item detail di bawah
         return listOf(
             CategoryItem("📄", "Administrasi", getWebAiItems("Administrasi").size, "web"),
             CategoryItem("✨", "Media Interaktif", getWebAiItems("Media Interaktif").size, "web"),
@@ -53,14 +54,21 @@ object DataSource {
 
     // Sumber data DETAIL untuk Web AI
     fun getWebAiItems(category: String): List<DetailItem.WebAi> {
+        // Di sinilah Anda mengisi daftar website untuk setiap kategori
         return when (category) {
+            "Administrasi" -> listOf(
+                DetailItem.WebAi(R.drawable.logo_googlesheets, "Google Sheets", "Aplikasi spreadsheet online untuk rekap nilai.", "https://docs.google.com/spreadsheets/")
+            )
             "Media Interaktif" -> listOf(
-                DetailItem.WebAi(R.drawable.logo_canva, "Canva", "Platform desain grafis.", "https://www.canva.com"),
-                DetailItem.WebAi(R.drawable.logo_mentimenter, "Mentimeter", "Alat untuk presentasi interaktif.", "https://www.mentimeter.com")
+                DetailItem.WebAi(R.drawable.logo_canva, "Canva", "Platform desain grafis untuk membuat presentasi.", "https://www.canva.com"),
+                DetailItem.WebAi(R.drawable.logo_mentimenter, "Mentimeter", "Alat untuk presentasi interaktif dengan polling.", "https://www.mentimeter.com")
             )
             "Evaluasi Pembelajaran" -> listOf(
-                DetailItem.WebAi(R.drawable.logo_quizizz, "Quizizz", "Platform untuk kuis gamifikasi.", "https://quizizz.com"),
-                DetailItem.WebAi(R.drawable.logo_googleforms, "Google Forms", "Alat untuk survei dan kuis.", "https://docs.google.com/forms/")
+                DetailItem.WebAi(R.drawable.logo_quizizz, "Quizizz", "Platform untuk membuat kuis gamifikasi.", "https://quizizz.com"),
+                DetailItem.WebAi(R.drawable.logo_googleforms, "Google Forms", "Alat serbaguna untuk survei dan kuis.", "https://docs.google.com/forms/")
+            )
+            "Media Pembelajaran" -> listOf(
+                DetailItem.WebAi(R.drawable.logo_youtube, "YouTube", "Platform berbagi video untuk materi belajar.", "https://youtube.com")
             )
             else -> emptyList()
         }

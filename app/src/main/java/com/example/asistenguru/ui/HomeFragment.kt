@@ -82,13 +82,16 @@ class HomeFragment : Fragment(R.layout.fragment_home), CategoryAdapter.OnCategor
     }
 
     private fun setupWebAiCategories(recyclerView: RecyclerView) {
+        // Mengambil daftar kategori web dari DataSource
         recyclerView.adapter = CategoryAdapter(DataSource.getWebCategories(), this)
     }
 
+    // Fungsi ini akan terpanggil saat salah satu kartu kategori diklik
     override fun onCategoryClick(category: CategoryItem) {
+        // Membuka halaman detail yang berisi daftar item
         val intent = Intent(requireContext(), DetailCategoryActivity::class.java).apply {
             putExtra("CATEGORY_TITLE", category.title)
-            putExtra("CATEGORY_TYPE", category.type)
+            putExtra("CATEGORY_TYPE", category.type) // Penting untuk membedakan web/prompt
         }
         startActivity(intent)
     }

@@ -11,4 +11,8 @@
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
         <item name="android:windowLightNavigationBar" tools:targetApi="o">true</item>
     </style>
+    <style name="App.AlertDialogTheme" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
+        <item name="colorPrimary">@color/accent_blue</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+    </style>
 </resources>
