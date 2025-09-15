@@ -4,8 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
-import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.asistenguru.CategoryListActivity
 import com.example.asistenguru.DetailCategoryActivity
@@ -21,50 +21,40 @@ class HomeFragment : Fragment(R.layout.fragment_home), CategoryAdapter.OnCategor
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Inisialisasi semua View
+        // Inisialisasi semua View yang ada di layout
+        val rvWebFavorit: RecyclerView = view.findViewById(R.id.rvWebFavorit)
         val rvPromptCategories: RecyclerView = view.findViewById(R.id.rvPromptCategories)
         val rvWebAiCategories: RecyclerView = view.findViewById(R.id.rvWebAiCategories)
         val tvSeeAllPrompts: TextView = view.findViewById(R.id.tvSeeAllPrompts)
-        val rvWebFavorit: RecyclerView = view.findViewById(R.id.rvWebFavorit)
         val tvSeeAllWebs: TextView = view.findViewById(R.id.tvSeeAllWebs)
-        val btnPromptAi: CardView = view.findViewById(R.id.btnPromptAi)
-        val btnWebAi: CardView = view.findViewById(R.id.btnWebAi)
 
+        // Setup semua RecyclerView
         setupWebFavorit(rvWebFavorit)
-        setupPromptCategories(view.findViewById(R.id.rvPromptCategories))
-        setupWebAiCategories(view.findViewById(R.id.rvWebAiCategories))
-        setupNavigation(view)
+        setupPromptCategories(rvPromptCategories)
+        setupWebAiCategories(rvWebAiCategories)
+
+        // Setup Navigasi untuk tombol "Lihat Semua"
+        setupNavigation(tvSeeAllPrompts, tvSeeAllWebs)
+
+        // Update Statistik
         updateStatistics(view)
     }
 
-    // --- FUNGSI BARU UNTUK WEB FAVORIT ---
     private fun setupWebFavorit(recyclerView: RecyclerView) {
-        val favoritList = getWebFavoritData()
-        recyclerView.adapter = WebFavoritAdapter(favoritList)
+        recyclerView.adapter = WebFavoritAdapter(DataSource.getWebFavoritData())
     }
 
     private fun getWebFavoritData(): List<WebFavorit> {
-        return listOf(
-            // DIUBAH: Menggunakan ID drawable untuk logo
-            WebFavorit(R.drawable.logo_canva, "Canva", "Desain Grafis", "https://www.canva.com"),
-            WebFavorit(R.drawable.logo_chatgpt, "ChatGPT", "Asisten AI", "https://chat.openai.com"),
-            WebFavorit(R.drawable.logo_quizizz, "Quizizz", "Kuis Interaktif", "https://quizizz.com"),
-            WebFavorit(R.drawable.logo_youtube, "YouTube", "Video Pembelajaran", "https://youtube.com"),
-            WebFavorit(R.drawable.logo_googleforms, "Google Forms", "Survei & Kuis", "https://docs.google.com/forms/")
-        )
+        // Data ini dipindah ke DataSource untuk kerapian
+        return DataSource.getWebFavoritData()
     }
 
-    /**
-     * Fungsi baru untuk mengambil data, menghitung, dan menampilkannya
-     * di kartu statistik secara otomatis.
-     */
     private fun updateStatistics(view: View) {
         val tvStatPromptCategories: TextView = view.findViewById(R.id.tvStatPromptCategories)
         val tvStatTotalPrompts: TextView = view.findViewById(R.id.tvStatTotalPrompts)
         val tvStatWebCategories: TextView = view.findViewById(R.id.tvStatWebCategories)
         val tvStatTotalWebs: TextView = view.findViewById(R.id.tvStatTotalWebs)
 
-        // Mengambil data dari DataSource
         val promptCategories = DataSource.getPromptCategories()
         val totalPrompts = promptCategories.sumOf { it.itemCount }
 
@@ -82,36 +72,28 @@ class HomeFragment : Fragment(R.layout.fragment_home), CategoryAdapter.OnCategor
     }
 
     private fun setupWebAiCategories(recyclerView: RecyclerView) {
-        // Mengambil daftar kategori web dari DataSource
         recyclerView.adapter = CategoryAdapter(DataSource.getWebCategories(), this)
     }
 
-    // Fungsi ini akan terpanggil saat salah satu kartu kategori diklik
     override fun onCategoryClick(category: CategoryItem) {
-        // Membuka halaman detail yang berisi daftar item
         val intent = Intent(requireContext(), DetailCategoryActivity::class.java).apply {
             putExtra("CATEGORY_TITLE", category.title)
-            putExtra("CATEGORY_TYPE", category.type) // Penting untuk membedakan web/prompt
+            putExtra("CATEGORY_TYPE", category.type)
         }
         startActivity(intent)
     }
 
-    private fun setupNavigation(view: View) {
-        val tvSeeAllPrompts: TextView = view.findViewById(R.id.tvSeeAllPrompts)
-        val tvSeeAllWebs: TextView = view.findViewById(R.id.tvSeeAllWebs)
-        val promptButton: CardView = view.findViewById(R.id.btnPromptAi)
-        val webButton: CardView = view.findViewById(R.id.btnWebAi)
-
-        tvSeeAllPrompts.setOnClickListener { navigateToCategoryList("Prompt AI") }
-        promptButton.setOnClickListener { navigateToCategoryList("Prompt AI") }
-        tvSeeAllWebs.setOnClickListener { navigateToCategoryList("Web AI") }
-        webButton.setOnClickListener { navigateToCategoryList("Web AI") }
+    // Fungsi setupNavigation sekarang hanya untuk tombol "Lihat Semua"
+    private fun setupNavigation(seeAllPrompts: TextView, seeAllWebs: TextView) {
+        seeAllPrompts.setOnClickListener { navigateToCategoryList("Prompt AI") }
+        seeAllWebs.setOnClickListener { navigateToCategoryList("Web AI") }
     }
 
     private fun navigateToCategoryList(pageTitle: String) {
-        val intent = Intent(requireContext(), CategoryListActivity::class.java).apply {
-            putExtra("PAGE_TITLE", pageTitle)
+        // Cara manual tanpa Safe Args
+        val bundle = Bundle().apply {
+            putString("pageTitle", pageTitle)
         }
-        startActivity(intent)
+        findNavController().navigate(R.id.action_homeFragment_to_categoryListFragment, bundle)
     }
 }

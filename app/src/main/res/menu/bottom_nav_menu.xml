@@ -1,0 +1,14 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/homeFragment" android:icon="@drawable/ic_home"
+        android:title="Beranda" />
+    <item
+        android:id="@+id/webAiFragment" android:icon="@drawable/ic_web_ai"
+        android:title="Web AI" />
+    <item
+        android:id="@+id/promptAiFragment" android:icon="@drawable/ic_prompt_ai"
+        android:title="Prompt AI" />
+    <item
+        android:id="@+id/databaseFragment" android:icon="@drawable/ic_database"
+        android:title="Database" />
+</menu>

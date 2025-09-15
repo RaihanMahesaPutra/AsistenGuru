@@ -21,4 +21,6 @@
     <string name="cd_navigate_to_database">Buka Database</string>
     <string name="ai_web_logo">ChatGpt</string>
     <string name="web_logo">ChatGpt</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

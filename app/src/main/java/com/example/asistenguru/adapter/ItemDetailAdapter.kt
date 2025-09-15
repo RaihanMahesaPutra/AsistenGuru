@@ -16,8 +16,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.asistenguru.R
 import com.example.asistenguru.model.DetailItem
 
-class ItemDetailAdapter(private val items: List<DetailItem>) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ItemDetailAdapter(
+    private var items: MutableList<DetailItem> // mutable list supaya bisa diupdate/filter
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
         private const val TYPE_PROMPT = 1
@@ -27,7 +28,7 @@ class ItemDetailAdapter(private val items: List<DetailItem>) :
     // ViewHolder untuk Prompt
     class PromptViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val content: TextView = view.findViewById(R.id.tvPromptContent)
-        val copyButton: Button = view.findViewById(R.id.btnCopy) // Tambahkan referensi tombol
+        val copyButton: Button = view.findViewById(R.id.btnCopy)
     }
 
     // ViewHolder untuk Web AI
@@ -67,15 +68,14 @@ class ItemDetailAdapter(private val items: List<DetailItem>) :
                 val promptHolder = holder as PromptViewHolder
                 promptHolder.content.text = item.content
 
-                // --- INI BAGIAN PENTINGNYA ---
-                // Tambahkan OnClickListener ke tombol Salin
+                // Tombol salin ke clipboard
                 promptHolder.copyButton.setOnClickListener {
                     val context = it.context
-                    val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                    val clipboard =
+                        context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                     val clip = ClipData.newPlainText("prompt", item.content)
                     clipboard.setPrimaryClip(clip)
 
-                    // Beri notifikasi ke pengguna
                     Toast.makeText(context, "Prompt disalin ke clipboard", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -92,6 +92,13 @@ class ItemDetailAdapter(private val items: List<DetailItem>) :
     }
 
     override fun getItemCount() = items.size
+
+    // FUNGSI BARU: Filter/update daftar item
+    fun filterList(filteredList: List<DetailItem>) {
+        items.clear()
+        items.addAll(filteredList)
+        notifyDataSetChanged()
+    }
 
     private fun openUrl(context: Context, url: String) {
         val intent = Intent(Intent.ACTION_VIEW).apply {

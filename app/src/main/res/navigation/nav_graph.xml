@@ -1,50 +1,52 @@
-<?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/homeFragment">
 
-    <!-- Halaman Home -->
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.example.asistenguru.ui.HomeFragment"
-        android:label="Home"
-        tools:layout="@layout/fragment_home" />
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_homeFragment_to_categoryListFragment"
+            app:destination="@id/categoryListFragment" />
+    </fragment>
 
-    <!-- Halaman Web AI -->
+    <fragment
+        android:id="@+id/categoryListFragment"
+        android:name="com.example.asistenguru.ui.CategoryListFragment"
+        android:label="fragment_category_list"
+        tools:layout="@layout/fragment_category_list">
+        <argument
+            android:name="pageTitle"
+            app:argType="string" />
+    </fragment>
+
     <fragment
         android:id="@+id/webAiFragment"
-        android:name="com.example.asistenguru.ui.web.WebAiFragment"
+        android:name="com.example.asistenguru.ui.CategoryListFragment"
         android:label="Web AI"
-        tools:layout="@layout/fragment_web_ai" />
+        tools:layout="@layout/fragment_category_list">
+        <argument
+            android:name="pageTitle"
+            android:defaultValue="Web AI" />
+    </fragment>
 
-    <!-- Halaman Prompt AI -->
     <fragment
         android:id="@+id/promptAiFragment"
-        android:name="com.example.asistenguru.ui.prompt.PromptAiFragment"
+        android:name="com.example.asistenguru.ui.CategoryListFragment"
         android:label="Prompt AI"
-        tools:layout="@layout/fragment_prompt_ai" />
+        tools:layout="@layout/fragment_category_list">
+        <argument
+            android:name="pageTitle"
+            android:defaultValue="Prompt AI" />
+    </fragment>
 
-    <!-- Halaman Database -->
     <fragment
         android:id="@+id/databaseFragment"
-        android:name="com.example.asistenguru.ui.database.DatabaseFragment"
-        android:label="Database"
+        android:name="com.example.asistenguru.ui.DatabaseFragment" android:label="fragment_database"
         tools:layout="@layout/fragment_database" />
-
-    <!-- Halaman Semua Prompt Detail -->
-    <fragment
-        android:id="@+id/promptDetailFragment"
-        android:name="com.example.asistenguru.ui.prompt.PromptDetailFragment"
-        android:label="Detail Prompt"
-        tools:layout="@layout/fragment_prompt_detail" />
-
-    <!-- Halaman Detail (untuk kategori prompt / web) -->
-    <fragment
-        android:id="@+id/detailFragment"
-        android:name="com.example.asistenguru.ui.detail.DetailFragment"
-        android:label="Detail"
-        tools:layout="@layout/fragment_detail" />
 
 </navigation>

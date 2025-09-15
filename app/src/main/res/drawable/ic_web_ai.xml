@@ -1,0 +1,20 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24"
+    android:tint="#000000">
+
+    <!-- Globe / Web -->
+    <path
+        android:fillColor="@android:color/white"
+        android:pathData="M12,2a10,10 0 1,0 0,20a10,10 0 1,0 0,-20zm0,2c1.85,0 3.55,0.63 4.9,1.69L12,12V4zm-2,0v8L7.1,5.69A7.96,7.96 0 0,1 10,4zM4,12c0,-1.85 0.63,-3.55 1.69,-4.9L12,12H4zm0,0c0,1.85 0.63,3.55 1.69,4.9L12,12H4zm6,8c-1.85,0 -3.55,-0.63 -4.9,-1.69L12,12v8h-2zm4,0v-8l4.9,4.9A7.96,7.96 0 0,1 14,20zM20,12c0,1.85 -0.63,3.55 -1.69,4.9L12,12h8zm0,0c0,-1.85 -0.63,-3.55 -1.69,-4.9L12,12h8z"/>
+
+    <!-- AI text simplified (small square for "AI") -->
+    <path
+        android:fillColor="@android:color/white"
+        android:pathData="M17,17h5v5h-5z"/>
+    <path
+        android:fillColor="@android:color/black"
+        android:pathData="M18,21v-3h1v1h1v-1h1v3h-1v-1h-1v1h-1z"/>
+</vector>
