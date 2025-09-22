@@ -1,22 +1,19 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    // DIHAPUS: Duplikat id("com.android.application")
-    // DIHAPUS: Duplikat id("org.jetbrains.kotlin.android")
     id("androidx.navigation.safeargs.kotlin")
 }
 
 android {
     namespace = "com.example.asistenguru"
-    compileSdk = 34 // DIUBAH: Gunakan versi SDK stabil
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.example.asistenguru"
         minSdk = 21
-        targetSdk = 34 // DIUBAH: Sesuaikan dengan compileSdk
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -36,12 +33,17 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+
+    // Fitur ini WAJIB aktif
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
-    implementation(libs.material)
+    implementation(libs.material) // Dependensi ini PENTING untuk MaterialButton
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.navigation.fragment.ktx)
@@ -50,3 +52,4 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 }
+
