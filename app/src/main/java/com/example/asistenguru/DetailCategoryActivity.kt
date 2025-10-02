@@ -1,18 +1,18 @@
 package com.example.asistenguru
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
+import android.view.View
+import android.widget.ProgressBar
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.asistenguru.adapter.ItemDetailAdapter
-import com.example.asistenguru.data.DataSource
 import com.example.asistenguru.model.DetailItem
 import com.google.android.material.search.SearchBar
-import com.google.android.material.search.SearchView
 
 class DetailCategoryActivity : AppCompatActivity() {
 
+    private val viewModel: DetailCategoryViewModel by viewModels()
     private lateinit var adapter: ItemDetailAdapter
     private val originalList = mutableListOf<DetailItem>()
 
@@ -22,64 +22,55 @@ class DetailCategoryActivity : AppCompatActivity() {
 
         // Inisialisasi Views
         val searchBar: SearchBar = findViewById(R.id.search_bar_detail)
-        val searchView: SearchView = findViewById(R.id.search_view_detail)
         val recyclerView: RecyclerView = findViewById(R.id.rvItems)
-        // DIUBAH: Ambil referensi ke RecyclerView hasil pencarian
-        val searchRecyclerView: RecyclerView = findViewById(R.id.rvSearchResults)
+        val progressOverlay: View = findViewById(R.id.progressOverlay)
+        val progressBar: ProgressBar = findViewById(R.id.progressBar)
+        val contentLayout: View = findViewById(R.id.contentLayout)
 
-        // Ambil data awal
+        // Ambil data dari Intent
+        val categoryId = intent.getStringExtra("CATEGORY_ID")
         val categoryTitle = intent.getStringExtra("CATEGORY_TITLE") ?: "Detail"
-        val categoryType = intent.getStringExtra("CATEGORY_TYPE") ?: "prompt"
         searchBar.setText(categoryTitle)
 
-        val initialItems = getItemsForCategory(categoryTitle, categoryType)
-        originalList.addAll(initialItems)
-
-        // Setup Adapter
-        adapter = ItemDetailAdapter(ArrayList(originalList))
-        // DIUBAH: Pasang SATU ADAPTER yang sama ke DUA RecyclerView
+        // Setup Adapter dengan list kosong
+        adapter = ItemDetailAdapter(mutableListOf())
         recyclerView.adapter = adapter
-        searchRecyclerView.adapter = adapter
 
-        // Setup Fungsionalitas Pencarian
-        searchView.setupWithSearchBar(searchBar)
-        searchView
-            .editText
-            .addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    filter(s.toString())
-                }
-                override fun afterTextChanged(s: Editable?) {}
-            })
+        // Mulai ambil data dari ViewModel jika ID tidak null
+        if (categoryId != null) {
+            viewModel.fetchItemsForCategory(categoryId)
+        }
+
+        // Amati perubahan dari ViewModel
+        observeViewModel(progressOverlay, contentLayout, recyclerView)
 
         searchBar.setNavigationOnClickListener {
             onBackPressed()
         }
     }
 
-    private fun filter(query: String) {
-        val filteredList = mutableListOf<DetailItem>()
-        if (query.isEmpty()) {
-            filteredList.addAll(originalList)
-        } else {
-            for (item in originalList) {
-                val match = when (item) {
-                    is DetailItem.Prompt -> item.content.contains(query, ignoreCase = true)
-                    is DetailItem.WebAi -> item.name.contains(query, ignoreCase = true) || item.description.contains(query, ignoreCase = true)
-                }
-                if (match) {
-                    filteredList.add(item)
+    private fun observeViewModel(progressOverlay: View, contentLayout: View, recyclerView: RecyclerView) {
+        viewModel.items.observe(this) { items ->
+            val detailItems = items.map { item ->
+                if (item.url.isNotEmpty()) {
+                    DetailItem.WebAi(0, item.name, item.description, item.url, item.imageUrl)
+                } else {
+                    DetailItem.Prompt(item.name)
                 }
             }
+            originalList.clear()
+            originalList.addAll(detailItems)
+            adapter.filterList(detailItems)
         }
-        adapter.filterList(filteredList)
-    }
 
-    private fun getItemsForCategory(category: String, type: String): List<DetailItem> {
-        if (type == "web") {
-            return DataSource.getWebAiItems(category)
+        viewModel.isLoading.observe(this) { isLoading ->
+            if (isLoading) {
+                progressOverlay.visibility = View.VISIBLE
+                contentLayout.visibility = View.GONE
+            } else {
+                progressOverlay.visibility = View.GONE
+                contentLayout.visibility = View.VISIBLE
+            }
         }
-        return DataSource.getPromptItems(category)
     }
 }

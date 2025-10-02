@@ -9,7 +9,7 @@ import com.example.asistenguru.R
 import com.example.asistenguru.model.CategoryItem
 
 class CategoryAdapter(
-    private val items: List<CategoryItem>,
+    private val items: MutableList<CategoryItem>,
     private val listener: OnCategoryClickListener
 ) : RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
 
@@ -43,6 +43,12 @@ class CategoryAdapter(
         holder.icon.text = item.iconEmoji
         holder.title.text = item.title
         holder.count.text = "${item.itemCount} ${item.type}"
+    }
+
+    fun updateData(newItems: List<CategoryItem>) {
+        items.clear()
+        items.addAll(newItems)
+        notifyDataSetChanged()
     }
 
     override fun getItemCount() = items.size

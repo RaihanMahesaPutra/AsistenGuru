@@ -1,54 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_light"
     tools:context=".DetailCategoryActivity">
 
-    <com.google.android.material.appbar.AppBarLayout
+    <!-- Konten utama -->
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/contentLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/card_background">
+        android:layout_height="match_parent"
+        android:background="@color/background_light">
 
-        <com.google.android.material.search.SearchBar
-            android:id="@+id/search_bar_detail"
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:navigationIcon="@drawable/ic_arrow_back"
-            android:hint="Cari item..." />
+            android:background="@color/card_background">
 
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvItems"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:paddingHorizontal="16dp"
-        android:paddingTop="12dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:listitem="@layout/item_prompt_detail" />
-
-    <com.google.android.material.search.SearchView
-        android:id="@+id/search_view_detail"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:hint="Cari item..."
-        app:layout_anchor="@id/search_bar_detail">
+            <com.google.android.material.search.SearchBar
+                android:id="@+id/search_bar_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:navigationIcon="@drawable/ic_arrow_back"
+                android:hint="Cari item..." />
+        </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvSearchResults"
+            android:id="@+id/rvItems"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
-            android:paddingTop="12dp"
             android:paddingHorizontal="16dp"
+            android:paddingTop="12dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             tools:listitem="@layout/item_prompt_detail" />
 
-    </com.google.android.material.search.SearchView>
+        <com.google.android.material.search.SearchView
+            android:id="@+id/search_view_detail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="Cari item..."
+            app:layout_anchor="@id/search_bar_detail">
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvSearchResults"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingTop="12dp"
+                android:paddingHorizontal="16dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_prompt_detail" />
+        </com.google.android.material.search.SearchView>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <!-- Overlay ProgressBar fullscreen -->
+    <FrameLayout
+        android:id="@+id/progressOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            style="?android:attr/progressBarStyleLarge"/>
+    </FrameLayout>
+</FrameLayout>

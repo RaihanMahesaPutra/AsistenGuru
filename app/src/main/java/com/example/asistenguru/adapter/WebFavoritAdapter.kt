@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ImageView // Impor ImageView
 import android.widget.TextView
 import android.widget.Toast
+import coil.load
 import androidx.recyclerview.widget.RecyclerView
 import com.example.asistenguru.R
 import com.example.asistenguru.model.WebFavorit
@@ -17,7 +18,7 @@ class WebFavoritAdapter(private val items: List<WebFavorit>) :
     RecyclerView.Adapter<WebFavoritAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val logo: ImageView = view.findViewById(R.id.ivFavoritLogo) // DIUBAH: Referensi ke ImageView
+        val logo: ImageView = view.findViewById(R.id.ivFavoritLogo)
         val name: TextView = view.findViewById(R.id.tvFavoritName)
         val description: TextView = view.findViewById(R.id.tvFavoritDescription)
     }
@@ -30,9 +31,14 @@ class WebFavoritAdapter(private val items: List<WebFavorit>) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = items[position]
-        holder.logo.setImageResource(item.logoResId) // DIUBAH: Mengatur gambar dari resource ID
         holder.name.text = item.name
         holder.description.text = item.description
+
+        holder.logo.load(item.imageUrl) {
+            crossfade(true) // Efek transisi
+            placeholder(R.drawable.ic_launcher_background) // Gambar sementara saat loading
+            error(R.drawable.ic_launcher_background) // Gambar jika gagal load
+        }
 
         holder.itemView.setOnClickListener {
             openUrl(it.context, item.url)

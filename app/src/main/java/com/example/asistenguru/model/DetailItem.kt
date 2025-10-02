@@ -9,6 +9,7 @@ sealed class DetailItem {
         val logoResId: Int, // DIUBAH: Menggunakan ID sumber daya drawable
         val name: String,
         val description: String,
-        val url: String
+        val url: String,
+        val imageUrl: String
     ) : DetailItem()
 }

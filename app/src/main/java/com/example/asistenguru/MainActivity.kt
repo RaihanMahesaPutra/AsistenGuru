@@ -8,15 +8,24 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
 
+    // DIUBAH: Jadikan properti kelas agar bisa diakses
+    private lateinit var bottomNavigationView: BottomNavigationView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
-        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
 
-        // Kode ini sudah cukup untuk menangani semua navigasi fragment
+        // Inisialisasi properti kelas
+        bottomNavigationView = findViewById(R.id.bottom_navigation)
+
         NavigationUI.setupWithNavController(bottomNavigationView, navController)
+    }
+
+    // BARU: Fungsi publik untuk mengganti tab yang dipilih
+    fun switchToTab(destinationId: Int) {
+        bottomNavigationView.selectedItemId = destinationId
     }
 }
