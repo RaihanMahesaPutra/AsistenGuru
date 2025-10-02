@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "953699004335",
+    "project_id": "asistenguruadmin",
+    "storage_bucket": "asistenguruadmin.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:953699004335:android:c9f87a4005630bb16cc95a",
+        "android_client_info": {
+          "package_name": "com.example.asistenguru"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAo7Art9z1I8CUavT-Ic2rvAyjAD52RH8U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
